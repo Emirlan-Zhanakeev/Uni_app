@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'filter_button.dart';
 
 class SearchFiler extends StatefulWidget {
@@ -10,20 +9,26 @@ class SearchFiler extends StatefulWidget {
 class _SearchFilerState extends State<SearchFiler> {
   TextEditingController controller = TextEditingController();
 
+
   List<Item> items = itemsList;
+
+  String selectedValue = 'New';
+
+
+
 
   @override
   Widget build(BuildContext context) {
+    // getDropdownStatus();
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Menu"),
-        centerTitle: true,
-        backgroundColor: Colors.indigo,
-      ),
       body: Column(
         children: [
+          SizedBox(height: 50),
           Container(
             margin: EdgeInsets.all(20),
+            /*child: Material(
+              elevation: 10.0,
+              shadowColor: Colors.black,*/
             child: TextField(
               controller: controller,
               style: TextStyle(color: Colors.black),
@@ -31,8 +36,8 @@ class _SearchFilerState extends State<SearchFiler> {
                 hintText: 'Enter word',
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  borderSide: BorderSide(color: Colors.blue),
+                  borderRadius: BorderRadius.circular(15),
+                  borderSide: BorderSide(color: Colors.blue, width: 3.0),
                 ),
               ),
               onChanged: searchItem,
@@ -86,6 +91,7 @@ class _SearchFilerState extends State<SearchFiler> {
               itemBuilder: (context, index) {
                 final item = items[index];
 
+
                 return Container(
                   margin: EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                   padding: EdgeInsets.all(15),
@@ -134,23 +140,19 @@ class _SearchFilerState extends State<SearchFiler> {
                           ),
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(top: 5),
-                        alignment: Alignment.bottomLeft,
-                        child: Text(
-                          "Статус: ${item.status}",
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey[600],
-                          ),
-                        ),
+                      DropdownButton<String>(
+                        value: item.status,
+                        items: [
+                          DropdownMenuItem(child: Text("New"), value: "New"),
+                          DropdownMenuItem(child: Text("In Progress"), value: "In Progress"),
+                          DropdownMenuItem(child: Text("Done"), value: "Done")
+                        ],
+                        onChanged: (value) {
+                          setState(() {
+                            item.status = value!;
+                          });
+                        },
                       ),
-
-                      /*ListTile(
-                        leading: Icon(Icons.done),
-                        title: Text(item.title),
-                        subtitle: Text(item.status),
-                      ),*/
                     ],
                   ),
                 );
@@ -161,6 +163,7 @@ class _SearchFilerState extends State<SearchFiler> {
       ),
     );
   }
+
 
   void searchItem(String query) {
     final suggestions = itemsList.where((item) {

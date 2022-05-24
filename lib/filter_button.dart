@@ -1,12 +1,11 @@
 
 class Item {
   final String title;
-  late final String status;
+  String status;
   Item(this.status, this.title);
 }
 
 String text = "";
-
 
 
 List<Item> itemsList = [
